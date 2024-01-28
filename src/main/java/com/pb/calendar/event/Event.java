@@ -3,6 +3,7 @@ package com.pb.calendar.event;
 import java.time.LocalDateTime;
 
 public abstract class Event {
+    private int id;
     // +userId createdByUserId
     // +List<userId> hosts
     // +List<userId> guests
