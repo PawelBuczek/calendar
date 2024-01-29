@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public abstract class Event {
     private int id;
-    // +userId createdByUserId
+    private int createdByUserId;
     // +List<userId> hosts
     // +List<userId> guests
 
@@ -12,7 +12,7 @@ public abstract class Event {
 
     private String summary;
     private String details;
-    private EventType type;
+    private EventCategory category;
     private LocalDateTime timeCreated;
     private LocalDateTime timeLastEdited;
 

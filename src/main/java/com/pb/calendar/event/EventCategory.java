@@ -1,5 +1,5 @@
 package com.pb.calendar.event;
 
-public enum EventType {
+public enum EventCategory {
     BASIC, TASK
 }
