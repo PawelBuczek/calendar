@@ -1,7 +1,10 @@
 package com.pb.calendar.event;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
 public abstract class Event {
     private int id;
     private int createdByUserId;

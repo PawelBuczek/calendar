@@ -1,4 +1,6 @@
-package com.pb.calendar.event;
+package com.pb.calendar.event.recurrence;
+
+import com.pb.calendar.event.Event;
 
 public class IrregularEvent extends Event {
     private int reccuringEventId;
