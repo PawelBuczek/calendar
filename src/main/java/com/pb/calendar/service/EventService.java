@@ -2,15 +2,13 @@ package com.pb.calendar.service;
 
 import com.pb.calendar.event.Event;
 import com.pb.calendar.event.OneTimeEvent;
-import com.pb.calendar.event.recurrence.strategy.RecurrenceStrategy;
 import com.pb.calendar.event.recurrence.RecurringEvent;
+import com.pb.calendar.event.recurrence.strategy.RecurrenceStrategy;
 import com.pb.calendar.exception.EventsLoopException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 public class EventService {
     List<Event> getCreatedEvents(int userId, LocalDateTime startTime, LocalDateTime endTime) {
@@ -21,7 +19,7 @@ public class EventService {
         return new ArrayList<>();
     }
 
-    List<OneTimeEvent> getOneTimeEvents(RecurringEvent recurringEvent) throws Exception {
+    List<OneTimeEvent> getOneTimeEvents(RecurringEvent recurringEvent) throws EventsLoopException {
         List<OneTimeEvent> events = new ArrayList<>();
         OneTimeEvent latestEvent = recurringEvent.getFirstEvent();
         RecurrenceStrategy strategy = recurringEvent.getRecurrenceStrategy();
@@ -29,7 +27,7 @@ public class EventService {
         int limit = recurringEvent.getRecurrenceCount() == 0 ? Integer.MAX_VALUE : recurringEvent.getRecurrenceCount();
 
         for (int i = 0; i < limit; i++) {
-            if (latestEvent.getEndTime().isAfter(recurrenceEndTime)){
+            if (latestEvent.getEndTime().isAfter(recurrenceEndTime)) {
                 break;
             }
             LocalDateTime maxStartTime = events.stream()

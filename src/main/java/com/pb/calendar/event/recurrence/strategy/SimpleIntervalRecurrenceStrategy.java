@@ -4,27 +4,29 @@ import com.pb.calendar.event.OneTimeEvent;
 
 import java.time.Duration;
 
-public class SimpleIntervalRecurrenceStrategy implements RecurrenceStrategy {
+public final class SimpleIntervalRecurrenceStrategy implements RecurrenceStrategy {
     private Duration simpleInterval = Duration.ofDays(1);
 
-    public Duration getSimpleInterval() {
-        return simpleInterval;
-    }
-
-    public boolean setSimpleInterval(Duration simpleInterval) {
+    public SimpleIntervalRecurrenceStrategy(Duration simpleInterval) {
         if (simpleInterval.isNegative() || simpleInterval.isZero()) {
-            return false;
-        } else {
-            this.simpleInterval = simpleInterval;
-            return true;
+            this.simpleInterval = simpleInterval.plus(Duration.ZERO);
         }
     }
 
+    public Duration getSimpleInterval() {
+        return simpleInterval.plus(Duration.ZERO);
+    }
+
+
     @Override
     public OneTimeEvent nextEvent(OneTimeEvent event) {
-        Duration duration = Duration.between(event.getStartTime(), event.getEndTime());
-        event.setStartTime(event.getStartTime().plus(duration));
-        event.setEndTime(event.getEndTime().plus(duration));
-        return event;
+        return new OneTimeEvent(
+                event.getCreatedByUserId(),
+                event.getSummary(),
+                event.getDetails(),
+                event.getCategory(),
+                event.getStartTime().plus(simpleInterval),
+                event.getEndTime().plus(simpleInterval)
+        );
     }
 }
