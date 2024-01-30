@@ -59,7 +59,7 @@ class EventServiceTest {
         LocalDateTime time = LocalDateTime.now();
         RecurringEvent recurringEvent = createRecurringEvent(time, time.plusMonths(2));
 
-        IrregularEvent irregularEvent = new IrregularEvent(1, "sum", "det", EventCategory.BASIC,
+        IrregularEvent irregularEvent = new IrregularEvent(1, "differentSum", "det", EventCategory.BASIC,
                 time, time.plusMinutes(15), 3, IrregularEventType.MODIFIED);
 
         recurringEvent.getIrregularEvents().add(irregularEvent);
@@ -68,6 +68,7 @@ class EventServiceTest {
 
         oneTimeEvents.forEach(System.out::println);
         assertEquals(360, oneTimeEvents.size());
+        assertEquals("differentSum",oneTimeEvents.get(3).getSummary());
     }
 
     @Test
