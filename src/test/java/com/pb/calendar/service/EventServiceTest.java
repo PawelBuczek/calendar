@@ -13,37 +13,35 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class EventServiceTest {
+
     private static final EventService eventService = new EventService();
+
+    private RecurringEvent createRecurringEvent(LocalDateTime startTime, LocalDateTime endTime) {
+        SimpleIntervalRecurrenceStrategy recurrenceStrategy = new SimpleIntervalRecurrenceStrategy(Duration.ofHours(4));
+
+        OneTimeEvent firstEvent = new OneTimeEvent(1, "sum", "det", EventCategory.BASIC, startTime, startTime.plusMinutes(15));
+
+        return new RecurringEvent(firstEvent, recurrenceStrategy, 0, startTime, startTime, startTime, endTime);
+    }
 
     @Test
     void getOneTimeEventsSimpleCase() throws EventsLoopException {
-        SimpleIntervalRecurrenceStrategy recurrenceStrategy = new SimpleIntervalRecurrenceStrategy(Duration.ofHours(4));
-
         LocalDateTime time = LocalDateTime.now();
-        OneTimeEvent firstEvent = new OneTimeEvent(1, "sum", "det", EventCategory.BASIC,
-                time, time.plusMinutes(15));
-
-        RecurringEvent recurringEvent = new RecurringEvent(firstEvent, recurrenceStrategy, 0,
-                time, time, time, time.plusMonths(2));
+        RecurringEvent recurringEvent = createRecurringEvent(time, time.plusMonths(2));
 
         List<OneTimeEvent> oneTimeEvents = eventService.getOneTimeEvents(recurringEvent);
+
         oneTimeEvents.forEach(System.out::println);
-
-        assert oneTimeEvents.size() == 360;
-
+        assertEquals(360, oneTimeEvents.size());
     }
 
     @Test
     void getOneTimeEventsWithIrregularEventCancelled() throws EventsLoopException {
-        SimpleIntervalRecurrenceStrategy recurrenceStrategy = new SimpleIntervalRecurrenceStrategy(Duration.ofHours(4));
-
         LocalDateTime time = LocalDateTime.now();
-        OneTimeEvent firstEvent = new OneTimeEvent(1, "sum", "det", EventCategory.BASIC,
-                time, time.plusMinutes(15));
-
-        RecurringEvent recurringEvent = new RecurringEvent(firstEvent, recurrenceStrategy, 0,
-                time, time, time, time.plusMonths(2));
+        RecurringEvent recurringEvent = createRecurringEvent(time, time.plusMonths(2));
 
         IrregularEvent irregularEvent = new IrregularEvent(1, "sum", "det", EventCategory.BASIC,
                 time, time.plusMinutes(15), 3, IrregularEventType.CANCELLED);
@@ -51,20 +49,15 @@ class EventServiceTest {
         recurringEvent.getIrregularEvents().add(irregularEvent);
 
         List<OneTimeEvent> oneTimeEvents = eventService.getOneTimeEvents(recurringEvent);
+
         oneTimeEvents.forEach(System.out::println);
-        assert oneTimeEvents.size() == 359;
+        assertEquals(359, oneTimeEvents.size());
     }
 
     @Test
     void getOneTimeEventsWithIrregularEventModified() throws EventsLoopException {
-        SimpleIntervalRecurrenceStrategy recurrenceStrategy = new SimpleIntervalRecurrenceStrategy(Duration.ofHours(4));
-
         LocalDateTime time = LocalDateTime.now();
-        OneTimeEvent firstEvent = new OneTimeEvent(1, "sum", "det", EventCategory.BASIC,
-                time, time.plusMinutes(15));
-
-        RecurringEvent recurringEvent = new RecurringEvent(firstEvent, recurrenceStrategy, 0,
-                time, time, time, time.plusMonths(2));
+        RecurringEvent recurringEvent = createRecurringEvent(time, time.plusMonths(2));
 
         IrregularEvent irregularEvent = new IrregularEvent(1, "sum", "det", EventCategory.BASIC,
                 time, time.plusMinutes(15), 3, IrregularEventType.MODIFIED);
@@ -72,20 +65,15 @@ class EventServiceTest {
         recurringEvent.getIrregularEvents().add(irregularEvent);
 
         List<OneTimeEvent> oneTimeEvents = eventService.getOneTimeEvents(recurringEvent);
+
         oneTimeEvents.forEach(System.out::println);
-        assert oneTimeEvents.size() == 360;
+        assertEquals(360, oneTimeEvents.size());
     }
 
     @Test
     void getOneTimeEventsWithIrregularEventAdded() throws EventsLoopException {
-        SimpleIntervalRecurrenceStrategy recurrenceStrategy = new SimpleIntervalRecurrenceStrategy(Duration.ofHours(4));
-
         LocalDateTime time = LocalDateTime.now();
-        OneTimeEvent firstEvent = new OneTimeEvent(1, "sum", "det", EventCategory.BASIC,
-                time, time.plusMinutes(15));
-
-        RecurringEvent recurringEvent = new RecurringEvent(firstEvent, recurrenceStrategy, 0,
-                time, time, time, time.plusMonths(2));
+        RecurringEvent recurringEvent = createRecurringEvent(time, time.plusMonths(2));
 
         IrregularEvent irregularEvent = new IrregularEvent(1, "sum", "det", EventCategory.BASIC,
                 time, time.plusMinutes(20), -1, IrregularEventType.ADDED);
@@ -93,7 +81,8 @@ class EventServiceTest {
         recurringEvent.getIrregularEvents().add(irregularEvent);
 
         List<OneTimeEvent> oneTimeEvents = eventService.getOneTimeEvents(recurringEvent);
+
         oneTimeEvents.forEach(System.out::println);
-        assert oneTimeEvents.size() == 361;
+        assertEquals(361, oneTimeEvents.size());
     }
 }
