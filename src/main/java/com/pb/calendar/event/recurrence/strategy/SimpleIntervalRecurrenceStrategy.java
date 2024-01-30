@@ -21,8 +21,10 @@ public class SimpleIntervalRecurrenceStrategy implements RecurrenceStrategy {
     }
 
     @Override
-    public OneTimeEvent nextEvent(OneTimeEvent previousEvent) {
-        previousEvent.getStartTime().plus(simpleInterval);
-        return new OneTimeEvent();
+    public OneTimeEvent nextEvent(OneTimeEvent event) {
+        Duration duration = Duration.between(event.getStartTime(), event.getEndTime());
+        event.setStartTime(event.getStartTime().plus(duration));
+        event.setEndTime(event.getEndTime().plus(duration));
+        return event;
     }
 }

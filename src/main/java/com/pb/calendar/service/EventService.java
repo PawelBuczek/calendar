@@ -4,10 +4,13 @@ import com.pb.calendar.event.Event;
 import com.pb.calendar.event.OneTimeEvent;
 import com.pb.calendar.event.recurrence.strategy.RecurrenceStrategy;
 import com.pb.calendar.event.recurrence.RecurringEvent;
+import com.pb.calendar.exception.EventsLoopException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class EventService {
     List<Event> getCreatedEvents(int userId, LocalDateTime startTime, LocalDateTime endTime) {
@@ -23,9 +26,20 @@ public class EventService {
         OneTimeEvent latestEvent = recurringEvent.getFirstEvent();
         RecurrenceStrategy strategy = recurringEvent.getRecurrenceStrategy();
         LocalDateTime recurrenceEndTime = recurringEvent.getEndTime();
-        while (latestEvent.getEndTime().isBefore(recurrenceEndTime) ) { // && count is below count
-            if (events.contains(latestEvent)) {
-                throw new Exception("bad bad situation"); // some better Exception needed
+        int limit = recurringEvent.getRecurrenceCount() == 0 ? Integer.MAX_VALUE : recurringEvent.getRecurrenceCount();
+
+        for (int i = 0; i < limit; i++) {
+            if (latestEvent.getEndTime().isAfter(recurrenceEndTime)){
+                break;
+            }
+            LocalDateTime maxStartTime = events.stream()
+                    .map(Event::getStartTime)
+//                    .filter(Objects::nonNull)
+                    .max(LocalDateTime::compareTo)
+                    .orElse(LocalDateTime.MIN);
+
+            if (latestEvent.getStartTime().isBefore(maxStartTime)) {
+                throw new EventsLoopException("events should only move forward in time");
             }
             events.add(latestEvent);
             latestEvent = strategy.nextEvent(latestEvent);
