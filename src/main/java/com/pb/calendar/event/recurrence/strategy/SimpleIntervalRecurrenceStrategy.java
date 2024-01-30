@@ -8,7 +8,7 @@ public final class SimpleIntervalRecurrenceStrategy implements RecurrenceStrateg
     private Duration simpleInterval = Duration.ofDays(1);
 
     public SimpleIntervalRecurrenceStrategy(Duration simpleInterval) {
-        if (simpleInterval.isNegative() || simpleInterval.isZero()) {
+        if (!simpleInterval.isNegative() && !simpleInterval.isZero()) {
             this.simpleInterval = simpleInterval.plus(Duration.ZERO);
         }
     }
