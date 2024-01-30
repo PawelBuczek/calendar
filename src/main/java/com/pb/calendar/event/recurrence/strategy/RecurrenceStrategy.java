@@ -1,4 +1,4 @@
-package com.pb.calendar.event.recurrence;
+package com.pb.calendar.event.recurrence.strategy;
 
 import com.pb.calendar.event.OneTimeEvent;
 

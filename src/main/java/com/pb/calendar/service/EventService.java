@@ -2,9 +2,8 @@ package com.pb.calendar.service;
 
 import com.pb.calendar.event.Event;
 import com.pb.calendar.event.OneTimeEvent;
-import com.pb.calendar.event.recurrence.RecurrenceStrategy;
+import com.pb.calendar.event.recurrence.strategy.RecurrenceStrategy;
 import com.pb.calendar.event.recurrence.RecurringEvent;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class EventService {
         OneTimeEvent latestEvent = recurringEvent.getFirstEvent();
         RecurrenceStrategy strategy = recurringEvent.getRecurrenceStrategy();
         LocalDateTime recurrenceEndTime = recurringEvent.getEndTime();
-        while (latestEvent.getEndTime().isBefore(recurrenceEndTime)) {
+        while (latestEvent.getEndTime().isBefore(recurrenceEndTime) ) { // && count is below count
             if (events.contains(latestEvent)) {
                 throw new Exception("bad bad situation"); // some better Exception needed
             }
