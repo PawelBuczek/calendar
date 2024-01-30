@@ -1,12 +1,20 @@
 package com.pb.calendar.event;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public abstract class Event {
     private int id;
+    private int createdByUserId;
+    private String summary;
+    private String details;
+    private EventCategory category;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     @Override
     public String toString() {
@@ -31,10 +39,4 @@ public abstract class Event {
         this.endTime = endTime;
     }
 
-    private int createdByUserId;
-    private String summary;
-    private String details;
-    private EventCategory category;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
 }
