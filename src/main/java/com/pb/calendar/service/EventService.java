@@ -30,16 +30,16 @@ public class EventService {
         List<IrregularEvent> irregularEvents = recurringEvent.getIrregularEvents();
 
         for (int i = 0; i < limit; i++) {
-            if (latestEvent.getEndTime().isAfter(recurrenceEndTime)) {
+            if (latestEvent.getPeriod().getEndTime().isAfter(recurrenceEndTime)) {
                 break;
             }
             LocalDateTime maxStartTime = events.stream()
-                    .map(Event::getStartTime)
+                    .map(event -> event.getPeriod().getStartTime())
 //                    .filter(Objects::nonNull)
                     .max(LocalDateTime::compareTo)
                     .orElse(LocalDateTime.MIN);
 
-            if (latestEvent.getStartTime().isBefore(maxStartTime)) {
+            if (latestEvent.getPeriod().getStartTime().isBefore(maxStartTime)) {
                 throw new EventsLoopException("events should only move forward in time");
             }
 
@@ -59,8 +59,8 @@ public class EventService {
                             irregularEvent.getSummary(),
                             irregularEvent.getDetails(),
                             irregularEvent.getCategory(),
-                            irregularEvent.getStartTime(),
-                            irregularEvent.getEndTime()));
+                            irregularEvent.getPeriod().getStartTime(),
+                            irregularEvent.getPeriod().getEndTime()));
                     case CANCELLED ->
                         // Handle CANCELLED case
                             System.out.println("Event nr " + i + " is cancelled");
@@ -79,8 +79,8 @@ public class EventService {
                         event.getSummary(),
                         event.getDetails(),
                         event.getCategory(),
-                        event.getStartTime(),
-                        event.getEndTime())));
+                        event.getPeriod().getStartTime(),
+                        event.getPeriod().getEndTime())));
 
         return events;
     }

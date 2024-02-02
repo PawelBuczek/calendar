@@ -25,8 +25,8 @@ public class IrregularEvent extends Event {
                 event.getSummary(),
                 event.getDetails(),
                 event.getCategory(),
-                event.getStartTime(),
-                event.getEndTime());
+                event.getPeriod().getStartTime(),
+                event.getPeriod().getEndTime());
         this.recurringEventCounter = recurringEventCounter;
         this.irregularEventType = irregularEventType;
     }

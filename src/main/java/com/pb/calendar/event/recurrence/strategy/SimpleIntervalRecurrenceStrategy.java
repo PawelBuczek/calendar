@@ -25,8 +25,8 @@ public final class SimpleIntervalRecurrenceStrategy implements RecurrenceStrateg
                 event.getSummary(),
                 event.getDetails(),
                 event.getCategory(),
-                event.getStartTime().plus(simpleInterval),
-                event.getEndTime().plus(simpleInterval)
+                event.getPeriod().getStartTime().plus(simpleInterval),
+                event.getPeriod().getEndTime().plus(simpleInterval)
         );
     }
 }

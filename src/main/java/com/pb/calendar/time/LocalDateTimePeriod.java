@@ -1,5 +1,6 @@
 package com.pb.calendar.time;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Duration;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 
 @Data
+@AllArgsConstructor
 public class LocalDateTimePeriod {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
