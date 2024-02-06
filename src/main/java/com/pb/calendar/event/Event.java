@@ -18,15 +18,6 @@ public abstract class Event {
     private EventCategory category;
     LocalDateTimePeriod period;
 
-    public Event(int createdByUserId, String summary, String details, EventCategory category, LocalDateTime startTime, LocalDateTime endTime) {
-        this.id = 1;
-        this.createdByUserId = createdByUserId;
-        this.summary = summary;
-        this.details = details;
-        this.category = category;
-        this.period = new LocalDateTimePeriod(startTime,endTime);
-    }
-
     public Event(int createdByUserId, String summary, String details, EventCategory category, LocalDateTimePeriod period) {
         this.id = 1;
         this.createdByUserId = createdByUserId;

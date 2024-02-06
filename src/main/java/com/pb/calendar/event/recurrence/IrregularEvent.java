@@ -3,6 +3,7 @@ package com.pb.calendar.event.recurrence;
 import com.pb.calendar.event.Event;
 import com.pb.calendar.event.EventCategory;
 import com.pb.calendar.event.OneTimeEvent;
+import com.pb.calendar.time.LocalDateTimePeriod;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +16,7 @@ public class IrregularEvent extends Event {
     private IrregularEventType irregularEventType;
 
     public IrregularEvent(int createdByUserId, String summary, String details, EventCategory category, LocalDateTime startTime, LocalDateTime endTime, int recurringEventCounter, IrregularEventType irregularEventType) {
-        super(createdByUserId, summary, details, category, startTime, endTime);
+        super(createdByUserId, summary, details, category, new LocalDateTimePeriod(startTime, endTime));
         this.recurringEventCounter = recurringEventCounter;
         this.irregularEventType = irregularEventType;
     }
@@ -25,8 +26,7 @@ public class IrregularEvent extends Event {
                 event.getSummary(),
                 event.getDetails(),
                 event.getCategory(),
-                event.getPeriod().getStartTime(),
-                event.getPeriod().getEndTime());
+                event.getPeriod());
         this.recurringEventCounter = recurringEventCounter;
         this.irregularEventType = irregularEventType;
     }
